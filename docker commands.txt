@@ -1,0 +1,62 @@
+docker build -f Dockerfile -t protractor-docker-image .
+
+docker ps -a
+docker run -ti --net=host -p 4444:4444 --privileged --rm -v //d/workspace/ConcentoAutomation:/project protractor-docker-image:latest
+
+docker run -ti --rm -v //d/workspace/Testing:/project protractor-docker-image:latest
+
+docker system prune -a -->.removes all images
+
+grunt runDesktopWebTests --baseUrl=https://vconcentod.dmroffice.com/ConcentoSuite --shm-size=256m --scenarioType=sanity --specFileName=Login --browserName=chrome --cleanServer=true --recordVideo=true --headLess=true
+
+docker run -ti --rm  --dns=192.168.1.2 --privileged -v //d/workspace/ProtractorHeadLess:/project protractor-docker-image:latest
+
+docker image ls
+
+docker run --net mynet123 --ip 10.10.10.170 -itd -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -v D:/dockermssql:/var/opt/mssql/data -d mssqlimage:latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -v D:/IISDocker/vconcentod-sqlbkp:/sqldb_backup -v D:/dockerfiles/files:/setupRestoreFiles --name sqlContainer -d mssqlimage:latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -d --name sqlContainer1 mssqlimage:latest
+
+docker build --build-arg password=Admin@12 -f mssqlDocker -t mssqlimage .
+
+docker build --build-arg password=Admin@12 -m 2GB --platform=Linux -f mssqlDocker -t mssqlimage . // this is for running linux image in windows container
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -m 2.5GB --platform=Linux --network=TransparentNet3 --ip 10.10.10.3 -v D:/IISDocker/vconcentod-sqlbkp:/sqldb_backup --name sqlContainer -d mssqlimage:latest // this is for running linux image in windows container
+
+docker network create -d nat --subnet=10.10.10.0/24 --gateway=10.10.10.1 TransparentNet3
+docker network create -d transparent --subnet=10.10.10.0/24 --gateway=10.10.10.1 TransparentNet3
+
+docker start -a sqlContainer1
+
+docker start sqlContainer1
+
+docker rm sqlContainer1
+
+docker stop <container id>
+
+docker network create --driver bridge --subnet=10.10.10.0/16 --gateway=10.10.10.1 –opt "com.docker.network.bridge.name"="docker1" mynet123
+docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 mynet123
+
+docker exec -t -i <container id> bash
+docker exec -t -i <container id> cmd (for windows container)
+
+docker network create --driver macvlan --subnet=10.11.40.0/24 --gateway=10.11.40.1 --o parent=eth0 shared_nw
+
+docker network create --driver macvlan --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 -o macvlan_mode=bridge -o parent=eth2.70 mynet
+
+docker network create --driver bridge --subnet=10.10.10.0/24 --gateway=10.10.10.1 -o parent=eth0 shared_nw
+
+docker network create -d macvlan –subnet=192.168.0.0/16 –ip-range=192.168.2.0/24 -o macvlan_mode=bridge -o parent=eth2.70 macvlan70
+
+apt-get update
+apt-get install net-tools
+apt-get install iputils-ping
+for ifconfig
+
+.\build.ps1 -target="PackageAll" -verbosity="Minimal" -packagePath="c:\Installer" -dbAddress="10.10.10.166"
