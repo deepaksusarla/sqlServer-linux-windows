@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/mssql/server
+USER root
+RUN apt-get clean && \ 
+	apt-get update && \
+    apt-get install -y curl && \
+    apt-get install -y vim && \
+	apt-get install -y p7zip-full
+	
+ARG password=Admin@12
+
+ENV SA_PASSWORD=${password}
+
+ENV ACCEPT_EULA=Y
+RUN mkdir SetupFiles
+COPY SetupFiles SetupFiles/
+
+RUN (/opt/mssql/bin/sqlservr --accept-eula & ) | grep -q "Service Broker manager has started" && \
+/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P ${password} -d master -i SetupFiles/InitialDBSetupScript.sql
+

@@ -1,0 +1,8 @@
+FROM microsoft/mssql-server-windows-developer
+RUN mkdir SetupFiles
+RUN mkdir setupRestoreFiles
+RUN mkdir sqldb_backup
+COPY SetupFiles/ c:/SetupFiles/
+WORKDIR C:/SetupFiles
+RUN sqlcmd -S 127.0.0.1 -E -d master -i .\InitialDBScript.sql
+WORKDIR C:/
