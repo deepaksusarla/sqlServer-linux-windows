@@ -1,13 +1,10 @@
 docker build -f Dockerfile -t protractor-docker-image .
 
 docker ps -a
-docker run -ti --net=host -p 4444:4444 --privileged --rm -v //d/workspace/ConcentoAutomation:/project protractor-docker-image:latest
 
 docker run -ti --rm -v //d/workspace/Testing:/project protractor-docker-image:latest
 
 docker system prune -a -->.removes all images
-
-grunt runDesktopWebTests --baseUrl=https://vconcentod.dmroffice.com/ConcentoSuite --shm-size=256m --scenarioType=sanity --specFileName=Login --browserName=chrome --cleanServer=true --recordVideo=true --headLess=true
 
 docker run -ti --rm  --dns=192.168.1.2 --privileged -v //d/workspace/ProtractorHeadLess:/project protractor-docker-image:latest
 
@@ -19,7 +16,7 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -d mcr.micr
 
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -v D:/dockermssql:/var/opt/mssql/data -d mssqlimage:latest
 
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -v D:/IISDocker/vconcentod-sqlbkp:/sqldb_backup -v D:/dockerfiles/files:/setupRestoreFiles --name sqlContainer -d mssqlimage:latest
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -v D:/IISDocker/sqlbkp:/sqldb_backup -v D:/dockerfiles/files:/setupRestoreFiles --name sqlContainer -d mssqlimage:latest
 
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@12' -p 1433:1433 -d --name sqlContainer1 mssqlimage:latest
 
@@ -58,5 +55,3 @@ apt-get update
 apt-get install net-tools
 apt-get install iputils-ping
 for ifconfig
-
-.\build.ps1 -target="PackageAll" -verbosity="Minimal" -packagePath="c:\Installer" -dbAddress="10.10.10.166"
